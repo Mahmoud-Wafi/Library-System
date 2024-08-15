@@ -25,7 +25,7 @@ const Books: React.FC = () => {
           <td>The Great Gatsby</td>
           <td>F. Scott Fitzgerald</td>
           <td>
-            <button onClick={() => handleEdit(1)}>Edit</button>
+            <button onClick={() => handleEdit(1)}>Add</button>
             <button onClick={() => handleDelete(1)}>Delete</button>
           </td>
         </tr>
