@@ -18,6 +18,9 @@ app.use('/books', bookRoutes);
 app.use('/authors', authorRoutes);
 app.use('/categories', categoryRoutes);
 app.use('/popular', popularRoutes);
+app.get('/', (req, res) => {
+    res.send('Welcome to the Library Management System!');
+});
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
