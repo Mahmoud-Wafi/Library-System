@@ -3,7 +3,7 @@ body {
   margin: 0;
   padding: 0;
   height: 100vh;
-  background: url('C:\Users\Ahmed Tarek\OneDrive\Desktop\LibraryManagementSystem\frontend\src\assets\images\admin.jpg') no-repeat center center fixed;
+  background: url(../images/admin-login-background.jpg);
   background-size: cover;
   display: flex;
   justify-content: center;

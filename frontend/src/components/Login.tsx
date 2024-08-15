@@ -21,7 +21,7 @@ const Login: React.FC<LoginProps> = ({ history }) => {
   };
 
   return (
-    <div className="login-container">
+    <div className="admin-login">
       <h2>Admin Login</h2>
       <div>
         <label htmlFor="username">Username:</label>
