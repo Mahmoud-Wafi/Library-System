@@ -23,7 +23,7 @@ const Authors: React.FC = () => {
           <td>1</td>
           <td>J.K. Rowling</td>
           <td>
-            <button onClick={() => handleEdit(1)}>Edit</button>
+            <button onClick={() => handleEdit(1)}>Add</button>
             <button onClick={() => handleDelete(1)}>Delete</button>
           </td>
         </tr>
