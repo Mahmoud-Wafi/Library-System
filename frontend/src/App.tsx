@@ -1,11 +1,16 @@
 import React from 'react';
-import AdminLogin from './components/AdminLogin';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import Login from './components/Login';
+import AdminDashboard from './components/AdminDashboard';
 
 const App: React.FC = () => {
   return (
-    <div className="App">
-      <AdminLogin />
-    </div>
+    <Router>
+      <Switch>
+        <Route exact path="/" component={Login} />
+        <Route path="/admin-dashboard" component={AdminDashboard} />
+      </Switch>
+    </Router>
   );
 };
 

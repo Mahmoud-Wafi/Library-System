@@ -1,0 +1,71 @@
+/* Container for the whole dashboard */
+.admin-dashboard-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Full viewport height */
+}
+
+/* Navbar styles */
+.admin-nav {
+  display: flex;
+  justify-content: flex-start; /* Align items to the left */
+  background-color: #f4f4f4;
+  padding: 10px 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.admin-nav button {
+  margin-right: 15px;
+  padding: 10px 20px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.admin-nav button:hover {
+  background-color: #0056b3;
+}
+
+/* Main content area */
+.admin-content {
+  padding: 20px;
+  flex: 1; /* Take up remaining space */
+  overflow: auto;
+}
+
+/* Table styles */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table th, table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+
+table th {
+  background-color: #f8f8f8;
+  font-weight: bold;
+}
+
+table td {
+  text-align: center;
+}
+
+button {
+  background-color: #007bff;
+  color: white;
+  padding: 5px 10px;
+  border: none;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
