@@ -1,36 +1,93 @@
-import React from 'react';
+import React, { useState } from 'react';
+import './Author.css';
 
-const Authors: React.FC = () => {
-  const handleEdit = (id: number) => {
-    // Logic for editing the author
+interface Author {
+  id: number;
+  name: string;
+}
+
+const Author: React.FC = () => {
+  const [authors, setAuthors] = useState<Author[]>([
+    { id: 1, name: 'John Doe' }
+  ]);
+  const [showAddForm, setShowAddForm] = useState<boolean>(false);
+  const [newAuthorName, setNewAuthorName] = useState<string>('');
+
+  const handleDelete = (id: number): void => {
+    setAuthors(authors.filter(author => author.id !== id));
   };
 
-  const handleDelete = (id: number) => {
-    // Logic for deleting the author
+  const handleAddButtonClick = (): void => {
+    setShowAddForm(true);
+  };
+
+  const handleAddAuthor = (): void => {
+    if (newAuthorName.trim() === '') {
+      alert('Author name cannot be empty.');
+      return;
+    }
+
+    const newId = authors.length > 0 ? authors[authors.length - 1].id + 1 : 1;
+    const newAuthor: Author = { id: newId, name: newAuthorName };
+
+    setAuthors([...authors, newAuthor]);
+    setNewAuthorName('');
+    setShowAddForm(false);
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setNewAuthorName(e.target.value);
+  };
+
+  const handleCloseForm = (): void => {
+    setShowAddForm(false);
+    setNewAuthorName('');
   };
 
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Name</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>1</td>
-          <td>J.K. Rowling</td>
-          <td>
-            <button onClick={() => handleEdit(1)}>Add</button>
-            <button onClick={() => handleDelete(1)}>Delete</button>
-          </td>
-        </tr>
-        {/* Repeat for other authors */}
-      </tbody>
-    </table>
+    <div className="container">
+      <button onClick={handleAddButtonClick} className="add-button">Add Author</button>
+      
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {authors.map(author => (
+            <tr key={author.id}>
+              <td>{author.id}</td>
+              <td>{author.name}</td>
+              <td>
+                <button onClick={() => handleDelete(author.id)}>Delete</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      {showAddForm && (
+        <div className="card add-form active">
+          <button onClick={handleCloseForm} className="close-button">×</button>
+          <h2>Add Author</h2>
+          <form onSubmit={(e) => { e.preventDefault(); handleAddAuthor(); }}>
+            <label>
+              Author Name:
+              <input 
+                type="text"
+                value={newAuthorName}
+                onChange={handleChange}
+              />
+            </label>
+            <button type="submit">Add Author</button>
+          </form>
+        </div>
+      )}
+    </div>
   );
 };
 
-export default Authors;
+export default Author;
