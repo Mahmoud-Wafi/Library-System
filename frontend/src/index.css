@@ -11,7 +11,17 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  
 }
+
+#root {
+  height: 100vh; /* Ensure full height */
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  text-align: center;
+}
+
 
 a {
   font-weight: 500;
