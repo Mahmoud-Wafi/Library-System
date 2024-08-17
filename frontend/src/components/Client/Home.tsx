@@ -1,15 +1,13 @@
 import React from 'react';
 import './Home.css';
+import Login from './Login';
+import Signup from './Signup';
 
 const Home: React.FC = () => {
   return (
     <div className="home-container">
       <header>
-        <div className="login-container">
-          <input type="text" placeholder="Enter Your Username" />
-          <input type="password" placeholder="Enter Your Password" />
-          <button>Log In</button>
-        </div>
+        <Login />
         <h1>Welcome To Good Reads</h1>
       </header>
 
@@ -28,19 +26,8 @@ const Home: React.FC = () => {
             {/* List of categories goes here */}
           </div>
         </section>
+        <Signup />
 
-        <section className="signup-section">
-          <h2>New here? Create a free account!</h2>
-          <form>
-            <input type="text" placeholder="Enter Your First Name" />
-            <input type="text" placeholder="Enter Your Last Name" />
-            <input type="email" placeholder="Enter Your Email" />
-            <input type="password" placeholder="Enter Your Password" />
-            <input type="password" placeholder="Retype Password" />
-            <input type="file" placeholder="Upload your image" />
-            <button type="submit">Signup</button>
-          </form>
-        </section>
       </main>
 
       <footer>

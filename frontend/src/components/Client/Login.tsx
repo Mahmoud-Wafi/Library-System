@@ -22,23 +22,22 @@ const Login: React.FC<LoginProps> = ({ history }) => {
 
   return (
     <div className="admin-login">
-      <h2>Admin Login</h2>
       <div>
-        <label htmlFor="username">Username:</label>
         <input
           type="text"
           id="username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
+          placeholder='Username'
         />
       </div>
       <div>
-        <label htmlFor="password">Password:</label>
         <input
           type="password"
           id="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          placeholder='Password'
         />
       </div>
       <button onClick={handleLogin}>Login</button>
