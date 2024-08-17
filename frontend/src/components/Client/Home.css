@@ -47,6 +47,7 @@ header {
     padding: 10px;
     border: 1px solid #ccc;
     background-color: aliceblue;
+    height: 5vh;
     border-radius: 4px;
 }
 
@@ -55,6 +56,8 @@ header {
     background-color: #007bff;
     color: white;
     border: none;
+    height: 5vh;
+    width: 20vw;
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s ease;
@@ -112,14 +115,17 @@ main {
     padding: 10px;
     border: 1px solid #ccc;
     background-color: aliceblue;
+    height: 5vh;
+    width: 39vw;
     border-radius: 4px;
 }
 
 .signup-section button {
-    padding: 12px;
+    height: 5vh;
     background-color: #28a745;
     color: white;
     border: none;
+    width: 39vw;
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s ease;
