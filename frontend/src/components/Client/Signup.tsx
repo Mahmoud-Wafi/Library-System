@@ -1,87 +1,83 @@
 import React, { useState } from 'react';
-import './Signup.css';
+import axios from 'axios';
 
-const Signup = () => {
-  const [name, setName] = useState('');
-  const [username, setUsername] = useState(''); // New state for username
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+const Signup: React.FC = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    username: '',
+    password: '',
+    email: ''
+    
+  });
 
+  // Handle changes to input fields
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Basic validation
-    if (!name || !username || !email || !password ) {
-      alert('Please fill in all fields');
-      return;
-    }
-
-
-    // Email validation with regex
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      alert('Please enter a valid email');
-      return;
-    }
-
-    // Prepare form data
-    const formData = new FormData();
-    formData.append('name', name);
-    formData.append('username', username); // Append username
-    formData.append('email', email);
-    formData.append('password', password);
-
     try {
-        const response = await fetch('http://localhost:5000/auth/signup', { // Correct port for backend
-            method: 'POST',
-            body: formData,
-          });
-          
-      if (response.ok) {
-        alert('Signup successful!');
+      const response = await axios.post('http://localhost:5000/auth/register', formData);
+      console.log('User registered:', response.data);
+      window.alert('Registration successful!');
+    } catch (error: any) {
+      if (error.response && error.response.data.errors) {
+        const errorMessages = error.response.data.errors.map((errorItem: { msg: string }) => errorItem.msg).join('\n');
+        window.alert(`Registration failed:\n${errorMessages}`);
       } else {
-        alert('Signup failed');
+        console.error('Error registering user:', error);
+        window.alert('An unexpected error occurred. Please try again later.');
       }
-    } catch (error) {
-      console.error('Error:', error);
-      alert('Error during signup');
     }
   };
 
   return (
-    <div className="signup-section">
-      <h2>New here? Create a free account!</h2>
-      <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit}>
+      <div>
+        <label>Name:</label>
         <input
           type="text"
-          placeholder="Enter Your First Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          name="name"
+          value={formData.name}
+          onChange={handleChange}
+          required
         />
-        
+      </div>
+      <div>
+        <label>Username:</label>
         <input
           type="text"
-          placeholder="Enter Your Username" // New username field
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          name="username"
+          value={formData.username}
+          onChange={handleChange}
+          required
         />
-        <input
-          type="email"
-          placeholder="Enter Your Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+      </div>
+      <div>
+        <label>Password:</label>
         <input
           type="password"
-          placeholder="Enter Your Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          name="password"
+          value={formData.password}
+          onChange={handleChange}
+          required
         />
-      
-     
-        <button type="submit">Signup</button>
-      </form>
-    </div>
+      </div>
+      <div>
+        <label>Email:</label>
+        <input
+          type="email"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+          required
+        />
+      </div>
+      <button type="submit">Sign Up</button>
+    </form>
   );
 };
 
