@@ -1,41 +1,32 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
 const cors = require('cors');
-
-// Initialize Express
+require('dotenv').config(); // Make sure dotenv is required
 const app = express();
-app.use(bodyParser.json());
+app.use(express.json());
 app.use(cors());
-
-// Connect to MongoDB (Replace with your own connection string)
-mongoose.connect('mongodb://localhost:27017/bookdb', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
+// Route handling
+const userRoutes = require('./routes/users');
+const authRoutes = require('./routes/auth');
+const bookRoutes = require('./routes/books');
+const authorRoutes = require('./routes/authors');
+const categoryRoutes = require('./routes/categories');
+const popularRoutes = require('./routes/popular');
+app.use('/users', userRoutes);
+app.use('/auth', authRoutes);
+app.use('/books', bookRoutes);
+app.use('/authors', authorRoutes);
+app.use('/categories', categoryRoutes);
+app.use('/popular', popularRoutes);
+app.get('/', (req, res) => {
+    res.send('Welcome to the Library Management System!');
 });
 
-// Define a Schema and Model for Book
-const bookSchema = new mongoose.Schema({
-    name: String,
-    category: String,
-    author: String,
-    image: String
-});
-const Book = mongoose.model('Book', bookSchema);
-
-// API Endpoints
-app.get('/books', async (req, res) => {
-    const books = await Book.find();
-    res.json(books);
-});
-
-app.post('/books', async (req, res) => {
-    const newBook = new Book(req.body);
-    await newBook.save();
-    res.status(201).json(newBook);
-});
+// Connect to MongoDB
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log('MongoDB connected'))
+    .catch(err => console.error('MongoDB connection error:', err));
 
 // Start the server
-app.listen(5000, () => {
-    console.log('Server is running on port 5000');
-});
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
