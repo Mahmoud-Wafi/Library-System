@@ -29,7 +29,7 @@ router.get('/', async(req, res) => {
 });
 
 // Create a new category (admin only)
-router.post('/', authenticateToken, authorizeAdmin, async(req, res) => {
+router.post('/',  async(req, res) => {
     const { name } = req.body;
 
     if (!name) {

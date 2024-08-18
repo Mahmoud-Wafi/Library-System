@@ -1,38 +1,69 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import './Categories.css';
 
 interface Category {
-  id: number;
+  _id: string;
   name: string;
 }
 
 const Categories: React.FC = () => {
-  const [categories, setCategories] = useState<Category[]>([
-    { id: 1, name: 'Culture' }
-  ]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [showAddForm, setShowAddForm] = useState<boolean>(false);
   const [newCategoryName, setNewCategoryName] = useState<string>('');
 
-  const handleDelete = (id: number): void => {
-    setCategories(categories.filter(category => category.id !== id));
+  // Retrieve token from localStorage or other storage
+  const token = localStorage.getItem('authToken') || '';
+
+  useEffect(() => {
+    // Fetch initial categories from the server
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/categories', {
+          headers: { Authorization: `Bearer ${token}` } // Include the token in headers
+        });
+        setCategories(response.data);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
+    };
+
+    fetchCategories();
+  }, [token]); // Add token as dependency
+
+  const handleDelete = async (_id: string): Promise<void> => {
+    try {
+      await axios.delete(`http://localhost:5000/categories/${_id}`, {
+        headers: { Authorization: `Bearer ${token}` } // Include the token in headers
+      });
+      setCategories(categories.filter(category => category._id !== _id));
+    } catch (error) {
+      console.error('Error deleting category:', error);
+    }
   };
 
   const handleAddButtonClick = (): void => {
     setShowAddForm(true);
   };
 
-  const handleAddCategory = (): void => {
+  const handleAddCategory = async (): Promise<void> => {
     if (newCategoryName.trim() === '') {
       alert('Category name cannot be empty.');
       return;
     }
 
-    const newId = categories.length > 0 ? categories[categories.length - 1].id + 1 : 1;
-    const newCategory: Category = { id: newId, name: newCategoryName };
-
-    setCategories([...categories, newCategory]);
-    setNewCategoryName('');
-    setShowAddForm(false);
+    try {
+      const response = await axios.post('http://localhost:5000/categories', 
+        { name: newCategoryName },
+        { headers: { Authorization: `Bearer ${token}` } } // Include the token in headers
+      );
+      setCategories([...categories, response.data]);
+      setNewCategoryName('');
+      setShowAddForm(false);
+    } catch (error) {
+      console.error('Error adding category:', error);
+      alert('Failed to add category. Please try again.');
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -58,11 +89,11 @@ const Categories: React.FC = () => {
         </thead>
         <tbody>
           {categories.map(category => (
-            <tr key={category.id}>
-              <td>{category.id}</td>
+            <tr key={category._id}>
+              <td>{category._id}</td>
               <td>{category.name}</td>
               <td>
-                <button onClick={() => handleDelete(category.id)}>Delete</button>
+                <button onClick={() => handleDelete(category._id)}>Delete</button>
               </td>
             </tr>
           ))}

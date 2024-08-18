@@ -48,23 +48,23 @@ router.post('/login', [
         return res.status(400).json({ errors: errors.array() });
     }
 
+   // Example login route in Express.js
+
     const { username, password } = req.body;
-
-    try {
-        const user = await User.findOne({ username });
-        if (!user) return res.status(400).json({ message: 'Invalid username or password' });
-
-        const match = await bcrypt.compare(password, user.password);
-        if (!match) return res.status(400).json({ message: 'Invalid username or password' });
-
-        const accessToken = jwt.sign({ username: user.username, isAdmin: user.isAdmin },
-            process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' }
-        );
-
-        res.json({ accessToken });
-    } catch (error) {
-        res.status(500).json({ message: 'Internal server error', error: error.message });
+  
+    // Find user by username
+    const user = await User.findOne({ username });
+    if (user && bcrypt.compareSync(password, user.password)) {
+      // Send user data including isAdmin flag
+      res.json({
+        username: user.username,
+        isAdmin: user.isAdmin
+      });
+    } else {
+      res.status(401).json({ message: 'Invalid credentials' });
     }
+  
+  
 });
 
 module.exports = router;

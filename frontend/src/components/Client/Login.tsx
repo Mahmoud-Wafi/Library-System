@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import './Login.css'; // Import your CSS file
 
@@ -9,13 +10,29 @@ const Login: React.FC<LoginProps> = ({ history }) => {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
-  const handleLogin = () => {
-    // Check if credentials are correct
-    if (username === 'admin' && password === 'root') {
-      // Redirect to AdminDashboard on successful login
-      history.push('/admin-dashboard');
-    } else {
+  const handleLogin = async () => {
+    try {
+      // Send login request to backend
+      const response = await axios.post('http://localhost:5000/auth/login', {
+        username,
+        password
+      });
+
+      // Extract isAdmin from response data
+      const { isAdmin } = response.data;
+
+      // Store user info and isAdmin flag (optional)
+      localStorage.setItem('isAdmin', JSON.stringify(isAdmin));
+
+      // Redirect based on isAdmin flag
+      if (isAdmin) {
+        history.push('/admin-dashboard');
+      } else {
+        history.push('/home');
+      }
+    } catch (error) {
       // Handle invalid login
+      console.error('Login error:', error);
       alert('Invalid credentials');
     }
   };
