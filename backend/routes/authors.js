@@ -3,6 +3,19 @@ const router = express.Router();
 const Author = require('../models/Author');
 const { authenticateToken, authorizeAdmin } = require('../middleware/auth');
 
+router.get('/', async(req, res) => {
+    const { search = '' } = req.query;
+
+    try {
+        const authors = await Author.find({
+            name: new RegExp(search, 'i') // Case-insensitive search
+        });
+        res.json(authors);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 // Get all authors
 router.get('/', async(req, res) => {
     try {
