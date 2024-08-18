@@ -1,43 +1,41 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const cors = require('cors');  // Import CORS
-require('dotenv').config(); // Make sure dotenv is required
+const bodyParser = require('body-parser');
+const cors = require('cors');
 
+// Initialize Express
 const app = express();
-app.use(express.json());
-const corsOptions = {
-    origin: 'http://localhost:5173',
-    optionsSuccessStatus: 200
-};
-app.use(cors(corsOptions));
+app.use(bodyParser.json());
+app.use(cors());
 
-
-// Route handling
-const userRoutes = require('./routes/users');
-const authRoutes = require('./routes/auth');
-const bookRoutes = require('./routes/books');
-const authorRoutes = require('./routes/authors');
-const categoryRoutes = require('./routes/categories');
-const popularRoutes = require('./routes/popular');
-const signupRoutes = require('./routes/signup'); 
-
-app.use('/users', userRoutes);
-app.use('/auth', authRoutes);
-app.use('/books', bookRoutes);
-app.use('/authors', authorRoutes);
-app.use('/categories', categoryRoutes);
-app.use('/popular', popularRoutes);
-app.use('/signup', signupRoutes); 
-
-app.get('/', (req, res) => {
-    res.send('Welcome to the Library Management System!');
+// Connect to MongoDB (Replace with your own connection string)
+mongoose.connect('mongodb://localhost:27017/bookdb', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
 });
 
-// Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => console.log('MongoDB connected'))
-    .catch(err => console.error('MongoDB connection error:', err));
+// Define a Schema and Model for Book
+const bookSchema = new mongoose.Schema({
+    name: String,
+    category: String,
+    author: String,
+    image: String
+});
+const Book = mongoose.model('Book', bookSchema);
 
-    const PORT = process.env.PORT || 5173;
-    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-    
+// API Endpoints
+app.get('/books', async (req, res) => {
+    const books = await Book.find();
+    res.json(books);
+});
+
+app.post('/books', async (req, res) => {
+    const newBook = new Book(req.body);
+    await newBook.save();
+    res.status(201).json(newBook);
+});
+
+// Start the server
+app.listen(5000, () => {
+    console.log('Server is running on port 5000');
+});

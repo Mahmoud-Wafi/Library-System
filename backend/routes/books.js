@@ -1,50 +1,31 @@
 const express = require('express');
 const router = express.Router();
+const multer = require('multer');
+const path = require('path');
 const Book = require('../models/Book');
-const { authenticateToken, authorizeAdmin } = require('../middleware/auth');
 
-// Get all books
-router.get('/', async(req, res) => {
-    try {
-        const books = await Book.find().populate('category_id').populate('author_id');
-        res.json(books);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
+// Set up multer for file uploads
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/');
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname));
     }
 });
+const upload = multer({ storage });
 
-// Get a single book by ID
-router.get('/:id', async(req, res) => {
-    try {
-        const book = await Book.findById(req.params.id).populate('category_id').populate('author_id');
-        if (!book) return res.status(404).json({ message: 'Book not found' });
-        res.json(book);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
+router.get('/', async (req, res) => {
+    const books = await Book.find();
+    res.json(books);
 });
 
-// Create a new book (admin only)
-router.post('/', authenticateToken, authorizeAdmin, async(req, res) => {
-    const { name, photo, category_id, author_id } = req.body;
-    try {
-        const newBook = new Book({ name, photo, category_id, author_id });
-        await newBook.save();
-        res.status(201).json(newBook);
-    } catch (error) {
-        res.status(400).json({ message: error.message });
-    }
-});
-
-// Delete a book (admin only)
-router.delete('/:id', authenticateToken, authorizeAdmin, async(req, res) => {
-    try {
-        const book = await Book.findByIdAndDelete(req.params.id);
-        if (!book) return res.status(404).json({ message: 'Book not found' });
-        res.json({ message: 'Book deleted' });
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
+router.post('/', upload.single('image'), async (req, res) => {
+    const { name, category, author } = req.body;
+    const image = req.file ? req.file.path : 'default.jpg';
+    const newBook = new Book({ name, category, author, image });
+    await newBook.save();
+    res.status(201).json(newBook);
 });
 
 module.exports = router;

@@ -2,92 +2,124 @@ import React, { useState } from 'react';
 import './Book.css';
 
 interface Book {
-  id: number;
-  title: string;
+    id: number;
+    name: string;
+    category: string;
+    author: string;
+    image: string;
 }
 
 const Book: React.FC = () => {
-  const [books, setBooks] = useState<Book[]>([
-    { id: 1, title: 'Example Book' }
-  ]);
-  const [showAddForm, setShowAddForm] = useState<boolean>(false);
-  const [newBookTitle, setNewBookTitle] = useState<string>('');
+    const [showForm, setShowForm] = useState(false);
+    const [books, setBooks] = useState<Book[]>([]);
+    const [newBook, setNewBook] = useState<Omit<Book, 'id'>>({
+        name: '',
+        category: '',
+        author: '',
+        image: '',
+    });
 
-  const handleDelete = (id: number): void => {
-    setBooks(books.filter(book => book.id !== id));
-  };
+    const toggleForm = () => {
+        setShowForm(!showForm);
+    };
 
-  const handleAddButtonClick = (): void => {
-    setShowAddForm(true);
-  };
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value, files } = e.target;
+        setNewBook(prevBook => ({
+            ...prevBook,
+            [name]: name === 'image' && files ? URL.createObjectURL(files[0]) : value
+        }));
+    };
 
-  const handleAddBook = (): void => {
-    if (newBookTitle.trim() === '') {
-      alert('Book title cannot be empty.');
-      return;
-    }
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        const id = books.length ? books[books.length - 1].id + 1 : 1;
+        setBooks([...books, { id, ...newBook, image: newBook.image || 'default.jpg' }]);
+        setNewBook({ name: '', category: '', author: '', image: '' });
+        toggleForm();
+    };
 
-    const newId = books.length > 0 ? books[books.length - 1].id + 1 : 1;
-    const newBook: Book = { id: newId, title: newBookTitle };
+    return (
+        <div className="container">
+            <button className="add-button" onClick={toggleForm}>Add Book</button>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Photo</th>
+                        <th>Name</th>
+                        <th>CategoryID</th>
+                        <th>Author ID</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {books.map(book => (
+                        <tr key={book.id}>
+                            <td>{book.id}</td>
+                            <td><img src={book.image} alt="Book Cover" style={{ width: '50px', height: 'auto' }} /></td>
+                            <td>{book.name}</td>
+                            <td>{book.category}</td>
+                            <td>{book.author}</td>
+                            <td>
+                                <button>Edit</button> <button>Delete</button>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
 
-    setBooks([...books, newBook]);
-    setNewBookTitle('');
-    setShowAddForm(false);
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setNewBookTitle(e.target.value);
-  };
-
-  const handleCloseForm = (): void => {
-    setShowAddForm(false);
-    setNewBookTitle('');
-  };
-
-  return (
-    <div className="container">
-      <button onClick={handleAddButtonClick} className="add-button">Add Book</button>
-      
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Title</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {books.map(book => (
-            <tr key={book.id}>
-              <td>{book.id}</td>
-              <td>{book.title}</td>
-              <td>
-                <button onClick={() => handleDelete(book.id)}>Delete</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      {showAddForm && (
-        <div className="card add-form active">
-          <button onClick={handleCloseForm} className="close-button">×</button>
-          <h2>Add Book</h2>
-          <form onSubmit={(e) => { e.preventDefault(); handleAddBook(); }}>
-            <label>
-              Book Title:
-              <input 
-                type="text"
-                value={newBookTitle}
-                onChange={handleChange}
-              />
-            </label>
-            <button type="submit">Add Book</button>
-          </form>
+            {showForm && (
+                <div className="card add-form active">
+                    <button className="close-button" onClick={toggleForm}>&times;</button>
+                    <h2>Add Book</h2>
+                    <form onSubmit={handleSubmit}>
+                        <label>
+                            Book Name:
+                            <input
+                                type="text"
+                                name="name"
+                                value={newBook.name}
+                                onChange={handleInputChange}
+                                required
+                            />
+                        </label>
+                        <label>
+                            Category:
+                            <input
+                                type="text"
+                                name="category"
+                                value={newBook.category}
+                                onChange={handleInputChange}
+                                required
+                            />
+                        </label>
+                        <label>
+                            Author:
+                            <input
+                                type="text"
+                                name="author"
+                                value={newBook.author}
+                                onChange={handleInputChange}
+                                required
+                            />
+                        </label>
+                        <label>
+                            Image:
+                            <input
+                                type="file"
+                                name="image"
+                                accept="image/*"
+                                onChange={handleInputChange}
+                            />
+                        </label>
+                        <button type="submit">Submit</button>
+                    </form>
+                </div>
+            )}
         </div>
-      )}
-    </div>
-  );
+    );
 };
 
 export default Book;
