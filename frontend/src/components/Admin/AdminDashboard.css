@@ -9,12 +9,20 @@
 /* Navbar styles */
 .admin-nav {
   display: flex;
-  justify-content: space-around; /* Space out the buttons evenly */
+  justify-content: space-between; /* Space between the left and right sections */
+  align-items: center;
   background-color: #343a40; /* Darker background for the navbar */
   padding: 15px 20px; /* Increased padding for better spacing */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+/* Container for the left side of the navbar (buttons) */
+.nav-left {
+  display: flex;
+  justify-content: space-around; /* Space out the buttons evenly */
+}
+
+/* Styles for navbar buttons */
 .admin-nav button {
   margin-right: 0; /* Remove margin-right since we're spacing items evenly */
   padding: 10px 20px;
@@ -29,6 +37,27 @@
 
 .admin-nav button:hover {
   background-color: #0056b3;
+}
+
+/* Styles for the logout button */
+.logout-button {
+  display: flex;
+  align-items: center;
+  background-color: #f44336;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+  background-color: #d32f2f;
+}
+
+.logout-button svg {
+  margin-right: 8px; /* Space between icon and text */
 }
 
 /* Main content area */
@@ -63,6 +92,7 @@ table td {
   text-align: center;
 }
 
+/* General button styles */
 button {
   background-color: #007bff;
   color: white;
@@ -84,8 +114,16 @@ button:hover {
     align-items: flex-start; /* Align buttons to the left on smaller screens */
   }
 
-  .admin-nav button {
+  .nav-left {
+    width: 100%;
+  }
+
+  .admin-nav button, .logout-button {
     width: 100%;
     margin-bottom: 10px; /* Add spacing between buttons */
+  }
+
+  .logout-button {
+    justify-content: center; /* Center the logout button content */
   }
 }

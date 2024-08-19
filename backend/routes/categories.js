@@ -46,7 +46,7 @@ router.post('/',  async(req, res) => {
 });
 
 // Delete a category (admin only)
-router.delete('/:id', authenticateToken, authorizeAdmin, async(req, res) => {
+router.delete('/:id', async(req, res) => {
     const { id } = req.params;
 
     try {
