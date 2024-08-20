@@ -6,7 +6,7 @@ const Book = require('../models/Book');
 const { authenticateToken, authorizeAdmin } = require('../middleware/auth');
 
 // Search books by name, category, or author
-router.get('/', async(req, res) => {
+router.get('/', async (req, res) => {
     const { search = '', category = '', author = '' } = req.query;
 
     try {
@@ -16,35 +16,52 @@ router.get('/', async(req, res) => {
             ...(author && { author_id: author })
         };
 
-        const books = await Book.find(query).populate('category_id').populate('author_id');
+        // Find books with the specified query
+        const books = await Book.find(query)
+            .populate('category_id', 'name') // Only populate the 'name' field of the category
+            .populate('author_id', 'name');  // Only populate the 'name' field of the author
+
+        // Log the response to check the data format
+        console.log('Books response:', books);
+
         res.json(books);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 });
 
-// Get all books
-router.get('/', async(req, res) => {
+// Get a single book by ID
+router.get('/:id', async(req, res) => {
     try {
-        const books = await Book.find().populate('category_id').populate('author_id');
-        res.json(books);
+        const book = await Book.findById(req.params.id).populate('category_id').populate('author_id');
+        if (!book) return res.status(404).json({ message: 'Book not found' });
+        res.json(book);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 });
-const upload = multer({ storage });
 
-router.get('/', async (req, res) => {
-    const books = await Book.find();
-    res.json(books);
+// Create a new book (admin only)
+router.post('/', authenticateToken, authorizeAdmin, async(req, res) => {
+    const { name, photo, category_id, author_id } = req.body;
+    try {
+        const newBook = new Book({ name, photo, category_id, author_id });
+        await newBook.save();
+        res.status(201).json(newBook);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
 });
 
-router.post('/', upload.single('image'), async (req, res) => {
-    const { name, category, author } = req.body;
-    const image = req.file ? req.file.path : 'default.jpg';
-    const newBook = new Book({ name, category, author, image });
-    await newBook.save();
-    res.status(201).json(newBook);
+// Delete a book (admin only)
+router.delete('/:id', authenticateToken, authorizeAdmin, async(req, res) => {
+    try {
+        const book = await Book.findByIdAndDelete(req.params.id);
+        if (!book) return res.status(404).json({ message: 'Book not found' });
+        res.json({ message: 'Book deleted' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
 });
 
 module.exports = router;

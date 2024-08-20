@@ -1,21 +1,36 @@
 import React, { useState } from 'react';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import './Login.css'; // Import your CSS file
 
-// Define props interface that extends RouteComponentProps
-interface LoginProps extends RouteComponentProps {}
-
-const Login: React.FC<LoginProps> = ({ history }) => {
+const Login: React.FC = () => {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const navigate = useNavigate(); // Replaces history
 
-  const handleLogin = () => {
-    // Check if credentials are correct
-    if (username === 'admin' && password === 'root') {
-      // Redirect to AdminDashboard on successful login
-      history.push('/admin-dashboard');
-    } else {
+  const handleLogin = async () => {
+    try {
+      // Send login request to backend
+      const response = await axios.post('http://localhost:5000/auth/login', {
+        username,
+        password,
+      });
+
+      // Extract isAdmin from response data
+      const { isAdmin } = response.data;
+
+      // Store user info and isAdmin flag (optional)
+      localStorage.setItem('isAdmin', JSON.stringify(isAdmin));
+
+      // Redirect based on isAdmin flag
+      if (isAdmin) {
+        navigate('/admin-dashboard'); // Use navigate instead of history.push
+      } else {
+        navigate('/home'); // Use navigate instead of history.push
+      }
+    } catch (error) {
       // Handle invalid login
+      console.error('Login error:', error);
       alert('Invalid credentials');
     }
   };
@@ -45,4 +60,4 @@ const Login: React.FC<LoginProps> = ({ history }) => {
   );
 };
 
-export default withRouter(Login);
+export default Login;

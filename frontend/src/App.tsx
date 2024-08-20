@@ -1,17 +1,20 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import AdminDashboard from './components/Admin/AdminDashboard';
-import Home from './components/Client/Home'; 
+import WelcomePage from "./components/Client/WelcomePage"; 
+import Home from './components/Client/Home';
 
 const App: React.FC = () => {
   return (
     <Router>
-      <Switch>
-        <Route exact path="/" component={Home} /> 
-        <Route path="/admin-dashboard" component={AdminDashboard} />
-      </Switch>
+      <Routes>
+        <Route path='/' element={<WelcomePage />}/>
+        <Route path="/admin-dashboard" element={<AdminDashboard />} />
+        <Route path="/home" element={<Home />} />
+      </Routes>
     </Router>
   );
 };
 
 export default App;
+

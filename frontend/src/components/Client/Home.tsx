@@ -1,46 +1,21 @@
-import React from 'react';
-import './Home.css';
-import Login from './Login';
-import Signup from './Signup';
+import React from 'react'
+import Navbar from './Navbar';
+import "./Home.css"
+import BookList from './BookList';
 
-const Home: React.FC = () => {
+export const Home = () => {
   return (
-    <div className="home-container">
-      <header>
-        <Login />
-        <h1>Welcome To Good Reads</h1>
-      </header>
-
-      <main>
-        <section className="popular-section">
-          <div className="popular-item">
-            <h2>Popular Authors</h2>
-            {/* List of authors goes here */}
-          </div>
-          <div className="popular-item">
-            <h2>Popular Books</h2>
-            {/* List of books goes here */}
-          </div>
-          <div className="popular-item">
-            <h2>Popular Categories</h2>
-            {/* List of categories goes here */}
-          </div>
-        </section>
-        <Signup />
-
+    <div>
+        <Navbar />
+        <main className="home-main">
+        <h1 className="home-title">Welcome to our library</h1>
+        <h2 className="home-subtitle">
+          Here you'll find special categories and books by renowned authors
+        </h2>
       </main>
-
-      <footer>
-        <nav>
-          <a href="#">Home</a>
-          <a href="#">About us</a>
-          <a href="#">Categories</a>
-          <a href="#">Authors</a>
-          <a href="#">Terms & Conditions</a>
-        </nav>
-      </footer>
+      <BookList />
     </div>
-  );
-};
+  )
+}
 
 export default Home;

@@ -1,38 +1,69 @@
-import React, { useState } from 'react';
-import './Author.css';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import './Authors.css';
 
 interface Author {
-  id: number;
+  _id: string;
   name: string;
 }
 
-const Author: React.FC = () => {
-  const [authors, setAuthors] = useState<Author[]>([
-    { id: 1, name: 'John Doe' }
-  ]);
+const Authors: React.FC = () => {
+  const [authors, setAuthors] = useState<Author[]>([]);
   const [showAddForm, setShowAddForm] = useState<boolean>(false);
   const [newAuthorName, setNewAuthorName] = useState<string>('');
 
-  const handleDelete = (id: number): void => {
-    setAuthors(authors.filter(author => author.id !== id));
+  // Retrieve token from localStorage or other storage
+  const token = localStorage.getItem('authToken') || '';
+
+  useEffect(() => {
+    // Fetch initial categories from the server
+    const fetchAuthors = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/authors', {
+          headers: { Authorization: `Bearer ${token}` } // Include the token in headers
+        });
+        setAuthors(response.data);
+      } catch (error) {
+        console.error('Error fetching authors:', error);
+      }
+    };
+
+    fetchAuthors();
+  }, [token]); // Add token as dependency
+
+  const handleDelete = async (_id: string): Promise<void> => {
+    try {
+      await axios.delete(`http://localhost:5000/authors/${_id}`, {
+        headers: { Authorization: `Bearer ${token}` } // Include the token in headers
+      });
+      setAuthors(authors.filter(author => author._id !== _id));
+    } catch (error) {
+      console.error('Error deleting author:', error);
+    }
   };
 
   const handleAddButtonClick = (): void => {
     setShowAddForm(true);
   };
 
-  const handleAddAuthor = (): void => {
+  const handleAddCategory = async (): Promise<void> => {
     if (newAuthorName.trim() === '') {
       alert('Author name cannot be empty.');
       return;
     }
 
-    const newId = authors.length > 0 ? authors[authors.length - 1].id + 1 : 1;
-    const newAuthor: Author = { id: newId, name: newAuthorName };
-
-    setAuthors([...authors, newAuthor]);
-    setNewAuthorName('');
-    setShowAddForm(false);
+    try {
+      const response = await axios.post('http://localhost:5000/authors', 
+        { name: newAuthorName },
+        { headers: { Authorization: `Bearer ${token}` } } // Include the token in headers
+      );
+      setAuthors([...authors, response.data]);
+      setNewAuthorName('');
+      setShowAddForm(false);
+    } catch (error) {
+      console.error('Error adding author:', error);
+      alert('Failed to add category. Please try again.');
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -58,11 +89,11 @@ const Author: React.FC = () => {
         </thead>
         <tbody>
           {authors.map(author => (
-            <tr key={author.id}>
-              <td>{author.id}</td>
+            <tr key={author._id}>
+              <td>{author._id}</td>
               <td>{author.name}</td>
               <td>
-                <button onClick={() => handleDelete(author.id)}>Delete</button>
+                <button onClick={() => handleDelete(author._id)}>Delete</button>
               </td>
             </tr>
           ))}
@@ -73,7 +104,7 @@ const Author: React.FC = () => {
         <div className="card add-form active">
           <button onClick={handleCloseForm} className="close-button">×</button>
           <h2>Add Author</h2>
-          <form onSubmit={(e) => { e.preventDefault(); handleAddAuthor(); }}>
+          <form onSubmit={(e) => { e.preventDefault(); handleAddCategory(); }}>
             <label>
               Author Name:
               <input 

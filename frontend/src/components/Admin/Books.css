@@ -1,0 +1,129 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Container Styles */
+  .container {
+    position: relative;
+    padding: 20px;
+  }
+  
+  /* Card Styles */
+  .card {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 500px; /* Increase width */
+    z-index: 1000;
+  }
+  
+  /* Close Button Styles */
+  .card .close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    border: none;
+    background: transparent;
+    font-size: 1.5em;
+    cursor: pointer;
+    color: #333;
+  }
+  
+  /* Add Form Styles */
+  .add-form {
+    display: none;
+  }
+  
+  .add-form.active {
+    display: block;
+  }
+  
+  .add-form h2 {
+    margin: 0 0 20px;
+    color: #333;
+  }
+  
+  /* Label and Input Styles */
+  label {
+    display: block;
+    margin-bottom: 5px; /* Space between label and input */
+    color: #000; /* Black text color */
+    font-weight: bold; /* Make labels stand out */
+  }
+  
+  input[type="text"],
+  input[type="file"] {
+    width: calc(100% - 20px); /* Increased width for better fit */
+    height: 30px; /* Increase height for better visibility */
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 15px; /* Space below each input */
+    background-color: #fff;
+    color: #333;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Button Styles */
+  button[type="button"],
+  button[type="submit"] {
+    background-color: #4CAF50;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  button[type="button"]:hover,
+  button[type="submit"]:hover {
+    background-color: #45a049;
+  }
+  
+  /* Table Styles */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  th {
+    background-color: #f4f4f4;
+    color: #333;
+  }
+  
+  td {
+    color: #000;
+  }
+  
+  /* Add Button Styles */
+  .add-button {
+    background-color: #4CAF50;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: block;
+    margin: 0 auto 20px;
+  }
+  
+  .add-button:hover {
+    background-color: #45a049;
+  }

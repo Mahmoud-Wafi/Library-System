@@ -38,7 +38,7 @@ router.get('/:id', async(req, res) => {
 });
 
 // Create a new author (admin only)
-router.post('/', authenticateToken, authorizeAdmin, async(req, res) => {
+router.post('/',  async(req, res) => {
     const { name, photo, dateOfBirth } = req.body;
     try {
         const newAuthor = new Author({ name, photo, dateOfBirth });
@@ -50,7 +50,7 @@ router.post('/', authenticateToken, authorizeAdmin, async(req, res) => {
 });
 
 // Delete an author (admin only)
-router.delete('/:id', authenticateToken, authorizeAdmin, async(req, res) => {
+router.delete('/:id',  async(req, res) => {
     try {
         const author = await Author.findByIdAndDelete(req.params.id);
         if (!author) return res.status(404).json({ message: 'Author not found' });
