@@ -2,14 +2,13 @@ import React, { useState } from 'react';
 import Categories from './Categories';
 import Books from './Books';
 import Authors from './Authors';
-import { useHistory } from 'react-router-dom'; // Assuming you are using React Router
+import { useNavigate } from 'react-router-dom'; // Replace useHistory with useNavigate
 import './AdminDashboard.css';
 import { FiLogOut } from 'react-icons/fi'; // Import logout icon
 
-
 const AdminDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState('Categories');
-  const history = useHistory();
+  const navigate = useNavigate(); // Replaces useHistory
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -28,8 +27,7 @@ const AdminDashboard: React.FC = () => {
     // Clear authentication token
     localStorage.removeItem('authToken');
     // Redirect to login page
-    history.push('/');
-    
+    navigate('/'); // Use navigate instead of history.push
   };
 
   return (

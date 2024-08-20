@@ -1,21 +1,19 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './Login.css'; // Import your CSS file
 
-// Define props interface that extends RouteComponentProps
-interface LoginProps extends RouteComponentProps {}
-
-const Login: React.FC<LoginProps> = ({ history }) => {
+const Login: React.FC = () => {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const navigate = useNavigate(); // Replaces history
 
   const handleLogin = async () => {
     try {
       // Send login request to backend
       const response = await axios.post('http://localhost:5000/auth/login', {
         username,
-        password
+        password,
       });
 
       // Extract isAdmin from response data
@@ -26,9 +24,9 @@ const Login: React.FC<LoginProps> = ({ history }) => {
 
       // Redirect based on isAdmin flag
       if (isAdmin) {
-        history.push('/admin-dashboard');
+        navigate('/admin-dashboard'); // Use navigate instead of history.push
       } else {
-        history.push('/home');
+        navigate('/home'); // Use navigate instead of history.push
       }
     } catch (error) {
       // Handle invalid login
@@ -62,4 +60,4 @@ const Login: React.FC<LoginProps> = ({ history }) => {
   );
 };
 
-export default withRouter(Login);
+export default Login;
