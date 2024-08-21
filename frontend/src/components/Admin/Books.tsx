@@ -222,4 +222,4 @@ const Books: React.FC = () => {
     );
 };
 
-export default Book;
+export default Books;

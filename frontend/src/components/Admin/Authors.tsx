@@ -16,7 +16,7 @@ const Authors: React.FC = () => {
   const token = localStorage.getItem('authToken') || '';
 
   useEffect(() => {
-    // Fetch initial categories from the server
+    // Fetch initial authors from the server
     const fetchAuthors = async () => {
       try {
         const response = await axios.get('http://localhost:5000/authors', {
@@ -46,7 +46,7 @@ const Authors: React.FC = () => {
     setShowAddForm(true);
   };
 
-  const handleAddCategory = async (): Promise<void> => {
+  const handleAddAuthor = async (): Promise<void> => {
     if (newAuthorName.trim() === '') {
       alert('Author name cannot be empty.');
       return;
@@ -62,7 +62,7 @@ const Authors: React.FC = () => {
       setShowAddForm(false);
     } catch (error) {
       console.error('Error adding author:', error);
-      alert('Failed to add category. Please try again.');
+      alert('Failed to add author. Please try again.');
     }
   };
 
@@ -104,7 +104,7 @@ const Authors: React.FC = () => {
         <div className="card add-form active">
           <button onClick={handleCloseForm} className="close-button">×</button>
           <h2>Add Author</h2>
-          <form onSubmit={(e) => { e.preventDefault(); handleAddCategory(); }}>
+          <form onSubmit={(e) => { e.preventDefault(); handleAddAuthor(); }}>
             <label>
               Author Name:
               <input 
@@ -121,4 +121,4 @@ const Authors: React.FC = () => {
   );
 };
 
-export default Author;
+export default Authors; // Correct export
