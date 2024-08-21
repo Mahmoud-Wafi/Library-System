@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './Categories.css';
+
 
 interface Category {
   _id: string;

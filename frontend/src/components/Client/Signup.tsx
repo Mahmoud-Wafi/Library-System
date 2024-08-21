@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import './Signup.css'
 
 const Signup: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -35,49 +36,51 @@ const Signup: React.FC = () => {
   };
 
   return (
+    <div className='signup'>
     <form onSubmit={handleSubmit}>
       <div>
-        <label>Name:</label>
         <input
           type="text"
           name="name"
           value={formData.name}
           onChange={handleChange}
           required
+          placeholder='Name'
         />
       </div>
       <div>
-        <label>Username:</label>
         <input
           type="text"
           name="username"
           value={formData.username}
           onChange={handleChange}
           required
+          placeholder='Username'
         />
       </div>
       <div>
-        <label>Password:</label>
         <input
           type="password"
           name="password"
           value={formData.password}
           onChange={handleChange}
           required
+          placeholder='Password'
         />
       </div>
       <div>
-        <label>Email:</label>
         <input
           type="email"
           name="email"
           value={formData.email}
           onChange={handleChange}
           required
+          placeholder='Email'
         />
       </div>
       <button type="submit">Sign Up</button>
     </form>
+    </div>
   );
 };
 

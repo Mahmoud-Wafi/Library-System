@@ -1,37 +1,40 @@
-.signup-section {
+.signup {
     background-color: rgba(0, 0, 0, 0.7);
     padding: 20px;
     width: 35%;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    height: 45vh;
 }
 
-.signup-section form {
+.signup form {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 30px;
 }
 
-.signup-section input {
+.signup input {
     padding: 10px;
     border: 1px solid #ccc;
     background-color: aliceblue;
     height: 5vh;
-    width: 34vw;
+    width: 100%;
     border-radius: 4px;
 }
 
-.signup-section button {
+.signup button {
     height: 5vh;
     background-color: #28a745;
     color: white;
     border: none;
-    width: 34vw;
+    width: 100%;
     border-radius: 4px;
     cursor: pointer;
+
+   
     transition: background-color 0.3s ease;
 }
 
-.signup-section button:hover {
+.signup button:hover {
     background-color: #218838;
 }

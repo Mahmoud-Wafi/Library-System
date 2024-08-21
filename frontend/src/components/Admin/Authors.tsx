@@ -1,22 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './Authors.css';
 
 interface Author {
   _id: string;
   name: string;
+  photo: string;
+  dateOfBirth: Date;
 }
 
 const Authors: React.FC = () => {
   const [authors, setAuthors] = useState<Author[]>([]);
   const [showAddForm, setShowAddForm] = useState<boolean>(false);
   const [newAuthorName, setNewAuthorName] = useState<string>('');
+  const [newAuthorPhoto, setNewAuthorPhoto] = useState<string>('');
+  const [newAuthorDOB, setNewAuthorDOB] = useState<string>('');
 
   // Retrieve token from localStorage or other storage
   const token = localStorage.getItem('authToken') || '';
 
   useEffect(() => {
-    // Fetch initial categories from the server
+    // Fetch initial authors from the server
     const fetchAuthors = async () => {
       try {
         const response = await axios.get('http://localhost:5000/authors', {
@@ -46,33 +49,40 @@ const Authors: React.FC = () => {
     setShowAddForm(true);
   };
 
-  const handleAddCategory = async (): Promise<void> => {
-    if (newAuthorName.trim() === '') {
-      alert('Author name cannot be empty.');
+  const handleAddAuthor = async (): Promise<void> => {
+    if (newAuthorName.trim() === '' || newAuthorPhoto.trim() === '' || newAuthorDOB.trim() === '') {
+      alert('All fields are required.');
       return;
     }
 
     try {
       const response = await axios.post('http://localhost:5000/authors', 
-        { name: newAuthorName },
+        { name: newAuthorName, photo: newAuthorPhoto, dateOfBirth: newAuthorDOB },
         { headers: { Authorization: `Bearer ${token}` } } // Include the token in headers
       );
       setAuthors([...authors, response.data]);
       setNewAuthorName('');
+      setNewAuthorPhoto('');
+      setNewAuthorDOB('');
       setShowAddForm(false);
     } catch (error) {
       console.error('Error adding author:', error);
-      alert('Failed to add category. Please try again.');
+      alert('Failed to add author. Please try again.');
     }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setNewAuthorName(e.target.value);
+    const { name, value } = e.target;
+    if (name === 'name') setNewAuthorName(value);
+    if (name === 'photo') setNewAuthorPhoto(value);
+    if (name === 'dateOfBirth') setNewAuthorDOB(value);
   };
 
   const handleCloseForm = (): void => {
     setShowAddForm(false);
     setNewAuthorName('');
+    setNewAuthorPhoto('');
+    setNewAuthorDOB('');
   };
 
   return (
@@ -84,6 +94,8 @@ const Authors: React.FC = () => {
           <tr>
             <th>ID</th>
             <th>Name</th>
+            <th>Photo</th>
+            <th>Date of Birth</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -92,6 +104,8 @@ const Authors: React.FC = () => {
             <tr key={author._id}>
               <td>{author._id}</td>
               <td>{author.name}</td>
+              <td><img src={author.photo} alt={author.name} style={{ width: '50px', height: '50px', objectFit: 'cover' }} /></td>
+              <td>{new Date(author.dateOfBirth).toLocaleDateString()}</td>
               <td>
                 <button onClick={() => handleDelete(author._id)}>Delete</button>
               </td>
@@ -104,12 +118,31 @@ const Authors: React.FC = () => {
         <div className="card add-form active">
           <button onClick={handleCloseForm} className="close-button">×</button>
           <h2>Add Author</h2>
-          <form onSubmit={(e) => { e.preventDefault(); handleAddCategory(); }}>
+          <form onSubmit={(e) => { e.preventDefault(); handleAddAuthor(); }}>
             <label>
               Author Name:
               <input 
                 type="text"
+                name="name"
                 value={newAuthorName}
+                onChange={handleChange}
+              />
+            </label>
+            <label>
+              Author Photo URL:
+              <input 
+                type="text"
+                name="photo"
+                value={newAuthorPhoto}
+                onChange={handleChange}
+              />
+            </label>
+            <label>
+              Date of Birth:
+              <input 
+                type="date"
+                name="dateOfBirth"
+                value={newAuthorDOB}
                 onChange={handleChange}
               />
             </label>
