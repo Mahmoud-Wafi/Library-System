@@ -64,7 +64,7 @@ const Navbar: React.FC = () => {
                         <Link to="/profile" className="nav-link" style={{ marginRight: '20px' , padding: "10px 10px" }}>
                             <FaUser size={30} />
                         </Link>
-                        <Link to="/logout" className="nav-link" style={{ marginRight: '19px' , padding: "10px 10px" }}>
+                        <Link to="/" className="nav-link" style={{ marginRight: '19px' , padding: "10px 10px" }}>
                             <FaSignOutAlt size={30} />
                         </Link>
                     
