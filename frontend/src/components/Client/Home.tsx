@@ -3,6 +3,7 @@ import Navbar from './Navbar';
 import "./Home.css"
 import BookList from './BookList';
 
+
 export const Home = () => {
   return (
     <div>
@@ -13,7 +14,15 @@ export const Home = () => {
           Here you'll find special categories and books by renowned authors
         </h2>
       </main>
+      <div id='book-section'>
       <BookList />
+      </div>
+
+  
+      
+
+      
+      
     </div>
   )
 }

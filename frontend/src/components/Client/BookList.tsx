@@ -30,14 +30,14 @@ const BookList = () => {
     }, []);
 
     return (
-        <div className="container">
+        <div>
             <h1 className="mb-4">Books</h1>
-            <div className="row">
+            <div className="book_container" >
                 {books.map(book => (
-                    <div className="col-md-4 mb-4 animate__animated animate__fadeIn" key={book._id} >
-                        <div className="card" style={{width:"400px"}}>
-                            <img src={book.photo} className="card-img-top" alt={book.name} style={{ height: '200px', objectFit: 'cover' }} />
-                            <div className="card-body">
+                    <div className="animate__animated animate__fadeIn" key={book._id} >
+                        <div className="book_card">
+                            <img src={book.photo} className="card-img-top" alt={book.name} style={{ height: '258px', objectFit: 'cover' }} />
+                            <div>
                                 <h5 className="card-title">{book.name}</h5>
                                 <p className="card-text">Author: {book.author_id?.name || 'Unknown'}</p>
                                 <p className="card-text">Category: {book.category_id?.name || 'Unknown'}</p>
@@ -47,7 +47,8 @@ const BookList = () => {
                     </div>
                 ))}
             </div>
-        </div>
+            </div>
+       
     );
 };
 

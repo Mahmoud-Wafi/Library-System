@@ -10,7 +10,7 @@
   }
   
   /* Card Styles */
-  .card {
+  .cards {
     position: absolute;
     top: -50%;
     left: 33%;
@@ -24,7 +24,7 @@
   }
   
   /* Close Button Styles */
-  .card .close-button {
+  .cards .close-button {
     position: absolute;
     top: 10px;
     right: 10px;
@@ -50,15 +50,15 @@
   }
   
   /* Label and Input Styles */
-  .card label {
+  .cards label {
     display: block;
     margin-bottom: 5px; /* Space between label and input */
     color: #000; /* Black text color */
     font-weight: bold; /* Make labels stand out */
   }
   
-  .card input[type="text"],
-  .card input[type="file"] {
+  .cards input[type="text"],
+  .cards input[type="file"] {
     width: calc(100% - 20px); /* Increased width for better fit */
     height: 30px; /* Increase height for better visibility */
     padding: 8px;
@@ -71,8 +71,8 @@
   }
   
   /* Button Styles */
-  .card button[type="button"],
-  .card button[type="submit"] {
+  .cards button[type="button"],
+  .cards button[type="submit"] {
     background-color: #4CAF50;
     color: #fff;
     padding: 10px 20px;
@@ -82,8 +82,8 @@
     transition: background-color 0.3s;
   }
   
-  .card button[type="button"]:hover,
-  .card button[type="submit"]:hover {
+  .cards button[type="button"]:hover,
+  .cards button[type="submit"]:hover {
     background-color: #45a049;
   }
   

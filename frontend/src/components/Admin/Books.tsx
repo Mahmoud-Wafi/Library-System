@@ -162,7 +162,7 @@ const Books: React.FC = () => {
             </table>
 
             {showAddForm && (
-                <div className="card add-form active">
+                <div className="cards add-form active">
                     <button onClick={handleCloseForm} className="close-button">×</button>
                     <h2>Add Book</h2>
                     <form onSubmit={(e) => { e.preventDefault(); handleAddBook(); }}>
